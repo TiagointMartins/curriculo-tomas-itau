@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tomás Barboza — Feito de Futuro</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --itau-orange: #EC7000;
+  --itau-orange-glow: rgba(236,112,0,0.35);
+  --itau-blue: #00298A;
+  --itau-blue-mid: #003DB5;
+  --itau-dark: #0A0A0F;
+  --itau-darker: #060608;
+  --itau-white: #F8F6F2;
+  --itau-cream: #FFF8F0;
+  --itau-muted: rgba(248,246,242,0.45);
+  --itau-line: rgba(248,246,242,0.1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--itau-darker);
+  color: var(--itau-white);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* CUSTOM CURSOR */
+.cursor {
+  width: 10px; height: 10px;
+  background: var(--itau-orange);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: width 0.2s, height 0.2s, background 0.2s;
+  mix-blend-mode: screen;
+}
+.cursor-follower {
+  width: 38px; height: 38px;
+  border: 1.5px solid rgba(236,112,0,0.5);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%,-50%);
+  transition: all 0.12s ease-out;
+}
+body:hover .cursor { opacity:1; }
+a:hover ~ .cursor, button:hover ~ .cursor { width:20px; height:20px; }
+
+/* MOBILE WARNING */
+.mobile-wall {
+  display: none;
+  position: fixed; inset: 0;
+  background: var(--itau-darker);
+  z-index: 99999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 28px;
+  text-align: center;
+  gap: 20px;
+}
+.mobile-wall::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, rgba(236,112,0,0.12) 0%, transparent 70%);
+}
+.mobile-wall .icon { font-size: 52px; position: relative; }
+.mobile-wall h2 { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--itau-white); position: relative; }
+.mobile-wall p { color: var(--itau-muted); font-size: 14px; line-height: 1.7; max-width: 320px; position: relative; }
+.mobile-wall button {
+  background: var(--itau-orange);
+  color: white;
+  border: none;
+  padding: 13px 30px;
+  border-radius: 50px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  position: relative;
+}
+@media (max-width: 800px) { .mobile-wall { display: flex; } body { cursor: auto; } .cursor, .cursor-follower { display: none; } }
+
+/* NOISE OVERLAY */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.6;
+}
+
+/* PROGRESS BAR */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--itau-orange), #FF9A2E);
+  z-index: 1000;
+  transition: width 0.1s;
+  box-shadow: 0 0 12px var(--itau-orange-glow);
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 900;
+  padding: 20px 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.4s, backdrop-filter 0.4s;
+}
+nav.scrolled {
+  background: rgba(6,6,8,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--itau-line);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none;
+}
+.nav-logo-box {
+  width: 36px; height: 36px;
+  background: var(--itau-orange);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; font-weight: 500;
+  color: white;
+  letter-spacing: -0.5px;
+}
+.nav-logo-text { font-size: 14px; font-weight: 600; color: var(--itau-white); }
+
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  color: var(--itau-muted);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: color 0.2s;
+  letter-spacing: 0.3px;
+}
+.nav-links a:hover { color: var(--itau-white); }
+
+.nav-cta {
+  background: transparent;
+  color: var(--itau-orange);
+  border: 1px solid var(--itau-orange);
+  padding: 9px 20px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-decoration: none;
+}
+.nav-cta:hover { background: var(--itau-orange); color: white; box-shadow: 0 0 24px var(--itau-orange-glow); }
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 120px 56px 80px;
+}
+
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+.orb-1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(236,112,0,0.18) 0%, transparent 70%); top: -100px; right: -100px; animation: orbFloat 8s ease-in-out infinite; }
+.orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(0,41,138,0.3) 0%, transparent 70%); bottom: -80px; left: -80px; animation: orbFloat 10s ease-in-out infinite reverse; }
+.orb-3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(236,112,0,0.08) 0%, transparent 70%); top: 40%; left: 30%; animation: orbFloat 12s ease-in-out infinite 2s; }
+
+@keyframes orbFloat { 0%,100% { transform: translate(0,0); } 50% { transform: translate(30px, -30px); } }
+
+.hero-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--itau-orange);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.3s forwards;
+  display: flex; align-items: center; gap: 10px;
+}
+.hero-label::before, .hero-label::after { content: '—'; opacity: 0.4; }
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 900;
+  line-height: 1.0;
+  text-align: center;
+  max-width: 900px;
+  margin-bottom: 2px;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.5s forwards;
+}
+
+.hero-title .name { color: var(--itau-white); }
+.hero-title .accent {
+  color: var(--itau-orange);
+  font-style: italic;
+  position: relative;
+  display: inline-block;
+}
+.hero-title .accent::after {
+  content: '';
+  position: absolute;
+  bottom: 4px; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--itau-orange), transparent);
+  border-radius: 2px;
+}
+
+.hero-tagline {
+  font-size: 17px;
+  color: var(--itau-muted);
+  text-align: center;
+  max-width: 560px;
+  line-height: 1.7;
+  margin-bottom: 48px;
+  font-weight: 400;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.7s forwards;
+}
+.hero-tagline strong { color: var(--itau-white); font-weight: 600; }
+
+.hero-cta-group {
+  display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.9s forwards;
+  margin-bottom: 80px;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--itau-white);
+  border: 1px solid rgba(248,246,242,0.2);
+  padding: 14px 28px;
+  border-radius: 50px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-ghost:hover { border-color: rgba(248,246,242,0.5); background: rgba(248,246,242,0.06); }
+
+.btn-orange {
+  background: var(--itau-orange);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 50px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 8px;
+  box-shadow: 0 0 0 rgba(236,112,0,0);
+}
+.btn-orange:hover { background: #FF8A00; box-shadow: 0 8px 32px rgba(236,112,0,0.4); transform: translateY(-2px); }
+
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 40px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  opacity: 0;
+  animation: fadeUp 1s 1.4s forwards;
+}
+.hero-scroll-hint span { font-size: 11px; color: var(--itau-muted); letter-spacing: 2px; text-transform: uppercase; font-family: 'DM Mono', monospace; }
+.scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--itau-orange), transparent); animation: scrollPulse 1.8s ease-in-out infinite; }
+@keyframes scrollPulse { 0%,100% { opacity:0.3; transform: scaleY(1); } 50% { opacity:1; transform: scaleY(1.2); } }
+
+.hero-chips {
+  display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+  opacity: 0;
+  animation: fadeUp 0.9s 1.1s forwards;
+  margin-bottom: 24px;
+}
+.chip {
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid var(--itau-line);
+  color: var(--itau-muted);
+  backdrop-filter: blur(8px);
+  background: rgba(248,246,242,0.04);
+  transition: all 0.25s;
+}
+.chip:hover { color: var(--itau-white); border-color: rgba(248,246,242,0.3); background: rgba(248,246,242,0.07); }
+
+@keyframes fadeUp { from { opacity:0; transform: translateY(28px); } to { opacity:1; transform: translateY(0); } }
+
+/* ===== DIVIDER ===== */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--itau-line) 20%, var(--itau-line) 80%, transparent);
+  margin: 0 56px;
+}
+
+/* ===== SECTION WRAPPER ===== */
+.section {
+  padding: 40px 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.section-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--itau-orange);
+  margin-bottom: 16px;
+}
+
+.section-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--itau-white);
+  margin-bottom: 16px;
+}
+.section-heading em { color: var(--itau-orange); font-style: italic; }
+
+.section-sub {
+  font-size: 16px;
+  color: var(--itau-muted);
+  max-width: 500px;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+/* ===== SOBRE / TRAJETÓRIA ===== */
+.sobre-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.sobre-text {
+  font-size: 17px;
+  color: rgba(248,246,242,0.75);
+  line-height: 1.85;
+}
+.sobre-text strong { color: var(--itau-white); font-weight: 600; }
+.sobre-text .highlight {
+  color: var(--itau-orange);
+  font-style: italic;
+}
+
+.sobre-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--itau-line);
+  border: 1px solid var(--itau-line);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.stat-cell {
+  background: rgba(248,246,242,0.02);
+  padding: 28px 24px;
+  transition: background 0.3s;
+}
+.stat-cell:hover { background: rgba(236,112,0,0.06); }
+.stat-big {
+  font-family: 'Playfair Display', serif;
+  font-size: 40px;
+  font-weight: 900;
+  color: var(--itau-orange);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.stat-desc { font-size: 12px; color: var(--itau-muted); font-weight: 500; line-height: 1.4; }
+
+/* ===== FORMAÇÃO ===== */
+.formacao-card {
+  border: 1px solid var(--itau-line);
+  border-radius: 20px;
+  padding: 36px 40px;
+  background: rgba(248,246,242,0.02);
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  transition: all 0.35s;
+  position: relative;
+  overflow: hidden;
+}
+.formacao-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: linear-gradient(to bottom, var(--itau-orange), var(--itau-blue-mid));
+  border-radius: 2px 0 0 2px;
+}
+.formacao-card:hover { background: rgba(248,246,242,0.04); border-color: rgba(248,246,242,0.18); transform: translateY(-3px); }
+
+.formacao-icon {
+  font-size: 40px;
+  flex-shrink: 0;
+}
+.formacao-title { font-size: 19px; font-weight: 700; color: var(--itau-white); margin-bottom: 5px; }
+.formacao-inst { font-size: 14px; color: var(--itau-orange); font-weight: 600; margin-bottom: 4px; }
+.formacao-period { font-size: 13px; color: var(--itau-muted); font-family: 'DM Mono', monospace; }
+
+/* ===== SKILLS ===== */
+.skills-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 48px;
+}
+
+.skill-group-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--itau-muted);
+  font-family: 'DM Mono', monospace;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--itau-line);
+}
+
+.skill-row {
+  margin-bottom: 20px;
+}
+.skill-meta { display: flex; justify-content: space-between; margin-bottom: 7px; }
+.skill-name-text { font-size: 13px; font-weight: 500; color: var(--itau-white); }
+.skill-pct-text { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--itau-orange); }
+.skill-track { height: 3px; background: rgba(248,246,242,0.08); border-radius: 2px; overflow: hidden; }
+.skill-fill-bar {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--itau-orange), #FF9A2E);
+  width: 0;
+  transition: width 1.4s cubic-bezier(0.16,1,0.3,1);
+  box-shadow: 0 0 8px rgba(236,112,0,0.4);
+}
+.skill-fill-bar.alt { background: linear-gradient(90deg, var(--itau-blue-mid), #4A80FF); box-shadow: 0 0 8px rgba(0,61,181,0.4); }
+
+.soft-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.soft-tag {
+  padding: 8px 16px;
+  border: 1px solid var(--itau-line);
+  border-radius: 50px;
+  font-size: 12px;
+  color: var(--itau-muted);
+  transition: all 0.25s;
+  cursor: default;
+}
+.soft-tag:hover { color: var(--itau-white); border-color: var(--itau-orange); background: rgba(236,112,0,0.07); transform: scale(1.04); }
+
+/* ===== EXPERIÊNCIA ===== */
+.exp-timeline {
+  position: relative;
+  padding-left: 40px;
+}
+.exp-timeline::before {
+  content: '';
+  position: absolute;
+  left: 6px; top: 8px; bottom: 8px;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--itau-orange), var(--itau-blue-mid), transparent);
+}
+
+.exp-item {
+  position: relative;
+  margin-bottom: 52px;
+  opacity: 0;
+  transform: translateX(-16px);
+  transition: all 0.6s ease-out;
+}
+.exp-item.visible { opacity: 1; transform: translateX(0); }
+
+.exp-dot {
+  position: absolute;
+  left: -36px; top: 6px;
+  width: 13px; height: 13px;
+  border-radius: 50%;
+  background: var(--itau-orange);
+  box-shadow: 0 0 0 3px rgba(236,112,0,0.2), 0 0 12px var(--itau-orange-glow);
+}
+.exp-dot.blue { background: var(--itau-blue-mid); box-shadow: 0 0 0 3px rgba(0,61,181,0.2); }
+.exp-dot.purple { background: #9B40E8; box-shadow: 0 0 0 3px rgba(155,64,232,0.2); }
+
+.exp-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--itau-orange);
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+.exp-date.blue { color: #4A80FF; }
+.exp-date.purple { color: #C070FF; }
+
+.exp-title { font-size: 18px; font-weight: 700; color: var(--itau-white); margin-bottom: 4px; }
+.exp-org { font-size: 13px; color: var(--itau-muted); font-weight: 500; margin-bottom: 12px; }
+.exp-desc {
+  font-size: 14px;
+  color: rgba(248,246,242,0.55);
+  line-height: 1.75;
+}
+.exp-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.exp-tag {
+  padding: 3px 11px;
+  border-radius: 50px;
+  font-size: 11px;
+  background: rgba(248,246,242,0.05);
+  color: var(--itau-muted);
+  border: 1px solid var(--itau-line);
+}
+
+/* ===== PROJETOS ===== */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.project-card {
+  border: 1px solid var(--itau-line);
+  border-radius: 18px;
+  padding: 32px;
+  background: rgba(248,246,242,0.02);
+  transition: all 0.35s;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+.project-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(236,112,0,0.07) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.project-card:hover { border-color: rgba(248,246,242,0.2); transform: translateY(-5px); box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+.project-card:hover::after { opacity: 1; }
+
+.project-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 52px;
+  font-weight: 900;
+  color: rgba(248,246,242,0.05);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.project-status {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+  padding: 4px 12px;
+  border-radius: 50px;
+  margin-bottom: 12px;
+}
+.status-live { background: rgba(0,214,143,0.12); color: #00D68F; border: 1px solid rgba(0,214,143,0.2); }
+.status-active { background: rgba(236,112,0,0.12); color: var(--itau-orange); border: 1px solid rgba(236,112,0,0.2); }
+
+.project-title { font-size: 16px; font-weight: 700; color: var(--itau-white); margin-bottom: 8px; line-height: 1.3; }
+.project-desc { font-size: 13px; color: rgba(248,246,242,0.5); line-height: 1.7; margin-bottom: 16px; }
+.project-stack { display: flex; flex-wrap: wrap; gap: 6px; }
+.stack-tag { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--itau-orange); background: rgba(236,112,0,0.08); border: 1px solid rgba(236,112,0,0.15); padding: 3px 9px; border-radius: 4px; }
+
+/* ===== "FEITO DE FUTURO" MANIFESTO ===== */
+.manifesto {
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 50px 56px;
+}
+
+.manifesto-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, rgba(236,112,0,0.12) 0%, rgba(0,41,138,0.08) 40%, transparent 70%);
+}
+
+.manifesto-lines {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(248,246,242,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(248,246,242,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.manifesto-content {
+  text-align: center;
+  max-width: 800px;
+  position: relative;
+  z-index: 2;
+}
+
+.manifesto-pre {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--itau-muted);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  opacity: 0;
+  transition: all 0.8s;
+}
+.manifesto-pre.vis { opacity: 1; }
+
+.manifesto-quote {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 4.5vw, 60px);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 40px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 1s 0.2s;
+}
+.manifesto-quote.vis { opacity: 1; transform: translateY(0); }
+
+.manifesto-quote .itau-part { color: var(--itau-muted); }
+.manifesto-quote .connector { color: rgba(248,246,242,0.3); display: block; font-size: 0.75em; margin: 2px 0; }
+.manifesto-quote .tomas-part {
+  color: var(--itau-white);
+}
+.manifesto-quote .future-word {
+  color: var(--itau-orange);
+  font-style: italic;
+  position: relative;
+}
+.manifesto-quote .future-word::after {
+  content: '';
+  position: absolute;
+  bottom: 2px; left: 0; right: 0;
+  height: 2px;
+  background: var(--itau-orange);
+  border-radius: 2px;
+}
+
+.manifesto-sub {
+  font-size: 16px;
+  color: var(--itau-muted);
+  line-height: 1.7;
+  max-width: 520px;
+  margin: 0 auto 48px;
+  opacity: 0;
+  transition: all 0.8s 0.5s;
+}
+.manifesto-sub.vis { opacity: 1; }
+.manifesto-sub strong { color: var(--itau-white); }
+
+.manifesto-cta-group {
+  display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+  opacity: 0;
+  transition: all 0.8s 0.7s;
+}
+.manifesto-cta-group.vis { opacity: 1; }
+
+/* ===== CONTATO ===== */
+.contato-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+
+.contato-list { display: flex; flex-direction: column; gap: 12px; }
+.contato-item {
+  display: flex; align-items: center; gap: 16px;
+  padding: 20px 24px;
+  border: 1px solid var(--itau-line);
+  border-radius: 14px;
+  background: rgba(248,246,242,0.02);
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s;
+}
+.contato-item:hover { border-color: var(--itau-orange); background: rgba(236,112,0,0.05); transform: translateX(6px); }
+.contato-icon { font-size: 22px; flex-shrink: 0; }
+.contato-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--itau-muted); font-family: 'DM Mono', monospace; margin-bottom: 3px; }
+.contato-value { font-size: 14px; font-weight: 600; color: var(--itau-white); }
+
+.disponibilidade {
+  border: 1px solid var(--itau-line);
+  border-radius: 20px;
+  padding: 36px;
+  background: rgba(248,246,242,0.02);
+}
+.disp-title { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--itau-muted); font-family: 'DM Mono', monospace; margin-bottom: 20px; }
+.disp-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--itau-line); }
+.disp-row:last-child { border-bottom: none; }
+.disp-k { font-size: 13px; color: var(--itau-muted); }
+.disp-v { font-size: 13px; font-weight: 600; color: var(--itau-white); }
+.disp-v.green { color: #00D68F; }
+
+/* ===== FOOTER ===== */
+footer {
+  padding: 40px 56px;
+  border-top: 1px solid var(--itau-line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.footer-left { font-size: 13px; color: var(--itau-muted); }
+.footer-left strong { color: var(--itau-white); font-weight: 600; }
+.footer-right { font-family: 'DM Mono', monospace; font-size: 11px; color: rgba(248,246,242,0.2); }
+
+/* SCROLL REVEAL */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: all 0.7s ease-out;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* DELAY UTILITIES */
+.d1 { transition-delay: 0.1s; }
+.d2 { transition-delay: 0.2s; }
+.d3 { transition-delay: 0.3s; }
+.d4 { transition-delay: 0.4s; }
+
+
+
+/* ===== RESPONSIVIDADE MOBILE + DESKTOP ===== */
+@media (hover: none), (pointer: coarse) {
+  body { cursor: auto; }
+  .cursor, .cursor-follower { display: none !important; }
+}
+
+@media (max-width: 1100px) {
+  nav { padding: 18px 32px; }
+  .section { padding: 56px 32px; }
+  .hero { padding: 120px 32px 72px; }
+  .sobre-grid, .skills-layout, .contato-layout { gap: 40px; }
+}
+
+@media (max-width: 900px) {
+  body { cursor: auto; }
+
+  /* O currículo agora funciona no mobile: remove o bloqueio antigo */
+  .mobile-wall { display: none !important; }
+  .cursor, .cursor-follower { display: none !important; }
+
+  nav {
+    padding: 14px 18px;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .nav-logo-text { display: none; }
+  .nav-logo-box { width: 34px; height: 34px; border-radius: 8px; }
+  .nav-links {
+    gap: 8px;
+    overflow-x: auto;
+    max-width: calc(100vw - 150px);
+    padding: 4px 2px;
+    scrollbar-width: none;
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a {
+    white-space: nowrap;
+    font-size: 12px;
+    padding: 8px 10px;
+    border: 1px solid var(--itau-line);
+    border-radius: 999px;
+    background: rgba(248,246,242,0.03);
+  }
+  .nav-cta {
+    padding: 9px 13px;
+    font-size: 0;
+    flex-shrink: 0;
+  }
+  .nav-cta::after { content: 'Contato'; font-size: 12px; }
+
+  .hero {
+    min-height: auto;
+    padding: 96px 20px 52px;
+  }
+  .hero-title {
+    font-size: clamp(34px, 11vw, 52px);
+    line-height: 1.05;
+    max-width: 100%;
+  }
+  .hero-label {
+    font-size: 10px;
+    letter-spacing: 1.8px;
+    text-align: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .hero-label::before, .hero-label::after { display: none; }
+  .hero-tagline { font-size: 15px; margin-bottom: 32px; }
+  .hero-cta-group { margin-bottom: 44px; }
+  .hero-scroll-hint { display: none; }
+  .hero-chips { gap: 8px; margin-top: 8px; }
+  .chip { font-size: 11px; padding: 6px 12px; }
+
+  .manifesto {
+    min-height: auto;
+    padding: 40px 0 26px;
+  }
+  .manifesto-quote {
+    font-size: clamp(30px, 10vw, 48px);
+    line-height: 1.16;
+    margin-bottom: 16px;
+  }
+  .manifesto-pre { font-size: 10px; letter-spacing: 2px; }
+
+  .divider { margin: 0 20px; }
+  .section { padding: 52px 20px; }
+  .section-heading { font-size: clamp(30px, 10vw, 42px); }
+  .section-sub { font-size: 15px; margin-bottom: 28px; }
+
+  .sobre-grid,
+  .skills-layout,
+  .contato-layout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .sobre-text { font-size: 15px; line-height: 1.75; }
+  .sobre-stats { grid-template-columns: 1fr 1fr; border-radius: 18px; }
+  .stat-cell { padding: 22px 18px; }
+  .stat-big { font-size: 34px; }
+
+  .formacao-card {
+    align-items: flex-start;
+    padding: 26px 22px;
+    gap: 18px;
+  }
+  .formacao-icon { font-size: 32px; }
+  .formacao-title { font-size: 16px; line-height: 1.35; }
+
+  .skill-meta { gap: 12px; align-items: flex-end; }
+  .skill-name-text { line-height: 1.35; }
+  .soft-list { gap: 7px; }
+  .soft-tag { font-size: 11px; padding: 8px 12px; }
+
+  .exp-timeline { padding-left: 28px; }
+  .exp-dot { left: -28px; }
+  .exp-item { margin-bottom: 40px; }
+  .exp-title { font-size: 17px; }
+
+  .projects-grid { grid-template-columns: 1fr; gap: 16px; }
+  .project-card { padding: 24px 20px; }
+  .project-num { font-size: 42px; }
+
+  .contato-item { padding: 16px 18px; align-items: flex-start; }
+  .contato-value { font-size: 13px; word-break: break-word; }
+  .disponibilidade { padding: 24px 20px; }
+  .disp-row { gap: 16px; align-items: flex-start; }
+  .disp-v { text-align: right; }
+
+  footer {
+    padding: 30px 20px;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 520px) {
+  .nav-links { max-width: calc(100vw - 126px); }
+  .nav-links a { font-size: 11px; padding: 7px 9px; }
+  .hero { padding-top: 88px; }
+  .hero-cta-group { width: 100%; }
+  .btn-ghost, .btn-orange { width: 100%; justify-content: center; padding: 13px 18px; }
+  .sobre-stats { grid-template-columns: 1fr; }
+  .stat-cell { padding: 22px; }
+  .formacao-card { flex-direction: column; }
+  .manifesto-quote br { display: none; }
+  .exp-desc, .project-desc { font-size: 13px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-follower" id="cursorFollower"></div>
+
+<!-- Mobile wall -->
+<div class="mobile-wall">
+  <div class="icon">💻</div>
+  <h2>Feito para telas maiores</h2>
+  <p>Este currículo interativo foi projetado para uma experiência completa em notebooks e desktops — com animações, efeitos e composições que fazem jus ao conceito <strong>"Feito de Futuro"</strong>.</p>
+  <button onclick="this.closest('.mobile-wall').style.display='none'">Continuar assim mesmo →</button>
+</div>
+
+<!-- Scroll progress -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Nav -->
+<nav id="mainNav">
+  <a href="#hero" class="nav-logo">
+    <div class="nav-logo-box">itaú</div>
+    <span class="nav-logo-text">× Tomás Barboza</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#sobre">Trajetória</a></li>
+    <li><a href="#habilidades">Habilidades</a></li>
+    <li><a href="#projetos">Projetos</a></li>
+  </ul>
+  <a href="mailto:tomasbsouza@gmail.com" class="nav-cta">Falar com Tomás</a>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="hero-orb orb-1"></div>
+  <div class="hero-orb orb-2"></div>
+  <div class="hero-orb orb-3"></div>
+
+  <div class="hero-label"> Estágio Itaú 2026 · Dados & IA</div>
+
+  <h1 class="hero-title">
+    <span class="name">Tomás Barboza e Souza</span><br>
+  </h1>
+
+<!-- ===== MANIFESTO "FEITO DE FUTURO" ===== -->
+<section class="manifesto" id="manifesto">
+  <div class="manifesto-content">
+    <div class="manifesto-pre" id="mpre">o encontro que faz sentido!</div>
+
+    <div class="manifesto-quote" id="mquote">
+      <span class="itau-part">O Itaú é <span style="font-style:italic">feito de futuro.</span></span>
+      <span class="connector">Vamos conversar</span>
+      <span class="tomas-part">para ele fazer parte<br>do <span class="future-word">meu.</span></span>
+    </div>
+
+  </div>
+</section>
+
+ <div class="hero-chips">
+    <span class="chip">🐍 Python</span>
+    <span class="chip">📊 Machine Learning</span>
+    <span class="chip">🕸️ Graph Neural Networks</span>
+    <span class="chip">🗄️ SQL</span>
+    <span class="chip">☁️ AWS</span>
+    <span class="chip">🌐 Inglês Avançado</span>
+  </div>
+
+  <div class="hero-cta-group">
+    <a href="#sobre" class="btn-ghost">✦ Conhecer a trajetória ↓</a>
+  </div>
+
+  <div class="hero-scroll-hint">
+    <span>scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ===== SOBRE ===== -->
+<div class="section" id="sobre">
+  <div class="reveal">
+    <div class="section-eyebrow">01 — Trajetória</div>
+    <h2 class="section-heading">Construindo o<br><em>amanhã</em>, hoje.</h2>
+    <p class="section-sub">Uma jornada que mistura curiosidade analítica, pesquisa aplicada e a crença de que dados revelam histórias que mudam o mundo.</p>
+  </div>
+
+  <div class="sobre-grid">
+    <div class="sobre-text reveal d1">
+      <p>Apaixonado por <strong>música, artes, tecnologia e descobertas</strong>, estou construindo minha trajetória em Ciência de Dados com um objetivo claro: <span class="highlight">gerar impacto real por meio da análise e interpretação de informações.</span></p>
+      <br>
+      <p>Acredito que dados podem contar histórias e revelar soluções. Por isso estou em busca de um ambiente que me desafie, que me permita crescer e contribuir com <strong>projetos que unam raciocínio analítico, criatividade e significado.</strong>
+      <p><span class="highlight">O Itaú é esse lugar.</span></p>
+    </div>
+
+    <div class="sobre-stats reveal d2">
+      <div class="stat-cell">
+        <div class="stat-big" id="cnt1">0</div>
+        <div class="stat-desc">Ano construindo<br>carreira em dados & IA</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-big" id="cnt2">0</div>
+        <div class="stat-desc">Projetos ativos de<br>dados & machine learning</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-big" id="cnt3">0</div>
+        <div class="stat-desc">Tecnologias de dados<br>em uso</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-big" id="cnt4">0<span style="font-size:24px">%</span></div>
+        <div class="stat-desc">Match com o perfil<br>da vaga Itaú</div>
+      </div>
+    </div>
+  </div>
+
+  <br><br>
+
+  <div class="reveal d2" style="margin-top:8px">
+    <div class="section-eyebrow" style="margin-bottom:20px">Formação acadêmica</div>
+    <div class="formacao-card">
+      <div class="formacao-icon">🎓</div>
+      <div>
+        <div class="formacao-title">Bacharelado em Ciência de Dados e Inteligência Artificial</div>
+        <div class="formacao-inst">Pontifícia Universidade Católica de São Paulo — PUC-SP</div>
+        <div class="formacao-period">FEV/2024 → JUN/2027 (Previsto)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===== HABILIDADES ===== -->
+<div class="section" id="habilidades">
+  <div class="reveal">
+    <div class="section-eyebrow">02 — Habilidades</div>
+    <p class="section-sub">Competências técnicas cultivadas na academia e na prática, com foco em análise, modelagem e entrega de valor a partir de dados.</p>
+  </div>
+
+  <div class="skills-layout">
+    <div class="reveal d1">
+      <div class="skill-group-title">Técnicas</div>
+      <div class="skill-row">
+        <div class="skill-meta"><span class="skill-name-text">Python — Pandas · NumPy · Matplotlib</span><span class="skill-pct-text">68%</span></div>
+        <div class="skill-track"><div class="skill-fill-bar" data-w="68"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-meta"><span class="skill-name-text">Machine Learning — Scikit-Learn</span><span class="skill-pct-text">60%</span></div>
+        <div class="skill-track"><div class="skill-fill-bar" data-w="60"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-meta"><span class="skill-name-text">SQL & Bancos de Dados</span><span class="skill-pct-text">62%</span></div>
+        <div class="skill-track"><div class="skill-fill-bar" data-w="62"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-meta"><span class="skill-name-text">Excel — Dashboards Dinâmicos</span><span class="skill-pct-text">65%</span></div>
+        <div class="skill-track"><div class="skill-fill-bar" data-w="65"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-meta"><span class="skill-name-text">Graph ML — Neo4j · PyTorch Geometric</span><span class="skill-pct-text">42%</span></div>
+        <div class="skill-track"><div class="skill-fill-bar alt" data-w="42"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-meta"><span class="skill-name-text">AWS Data Engineering</span><span class="skill-pct-text">35%</span></div>
+        <div class="skill-track"><div class="skill-fill-bar alt" data-w="35"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-meta"><span class="skill-name-text">Estatística & Inferência</span><span class="skill-pct-text">62%</span></div>
+        <div class="skill-track"><div class="skill-fill-bar" data-w="62"></div></div>
+      </div>
+    </div>
+
+    <div class="reveal d2">
+      <div class="skill-group-title">Interpessoais</div>
+      <div class="soft-list">
+        <span class="soft-tag">💡 Pensamento Crítico</span>
+        <span class="soft-tag">🗣️ Comunicação</span>
+        <span class="soft-tag">🤝 Trabalho em Equipe</span>
+        <span class="soft-tag">🚀 Proatividade</span>
+        <span class="soft-tag">📈 Evolução Constante</span>
+        <span class="soft-tag">👑 Liderança</span>
+        <span class="soft-tag">❤️ Empatia</span>
+        <span class="soft-tag">🌐 Inglês Avançado</span>
+        <span class="soft-tag">🎯 Foco em resultado</span>
+        <span class="soft-tag">🔬 Curiosidade científica</span>
+      </div>
+
+      <div style="margin-top:36px">
+        <div class="skill-group-title">Cursos em andamento</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div class="contato-item" style="padding:14px 18px;">
+            <span style="font-size:20px">☁️</span>
+            <div>
+              <div class="contato-label">Amazon Web Services</div>
+              <div class="contato-value" style="font-size:13px">AWS Academy: Data Engineering</div>
+            </div>
+          </div>
+          <div class="contato-item" style="padding:14px 18px;">
+            <span style="font-size:20px">📚</span>
+            <div>
+              <div class="contato-label">Alura</div>
+              <div class="contato-value" style="font-size:13px">Carreira: Ciência de Dados</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <br><br>
+  <div class="reveal d2" style="margin-top: 20px">
+    <div class="section-eyebrow" style="margin-bottom:20px">Experiência</div>
+    <div class="exp-timeline">
+      <div class="exp-item">
+        <div class="exp-dot"></div>
+        <div class="exp-date">🟢 Maio/2025 — Presente</div>
+        <div class="exp-title">Estagiário</div>
+        <div class="exp-org">Pró-Reitoria de Cultura e Relações Comunitárias · PUC-SP</div>
+        <div class="exp-desc">Assistência à equipe com Microsoft Office, analisando demandas e desenvolvendo métodos de eficiência. Participação em reuniões estratégicas para implementação de eventos culturais.</div>
+        <div class="exp-tags">
+          <span class="exp-tag">Excel</span>
+          <span class="exp-tag">Análise de processos</span>
+          <span class="exp-tag">Reuniões estratégicas</span>
+        </div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-dot purple"></div>
+        <div class="exp-date purple">🔬 Set/2025 → Set/2026</div>
+        <div class="exp-title">Pesquisador — Iniciação Científica</div>
+        <div class="exp-org">PUC-SP · Laboratório de Big Data & Grafos</div>
+        <div class="exp-desc">Detecção de Anomalias em Grafos de Transações Financeiras utilizando Técnicas de Big Data. Pesquisa altamente aplicável ao contexto bancário, com uso de redes neurais em grafos para identificação de fraudes.</div>
+        <div class="exp-tags">
+          <span class="exp-tag">Neo4j</span>
+          <span class="exp-tag">PyTorch Geometric</span>
+          <span class="exp-tag">Graph Neural Networks</span>
+          <span class="exp-tag">Big Data</span>
+          <span class="exp-tag">Fraud Detection</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===== PROJETOS ===== -->
+<div class="section" id="projetos">
+  <div class="reveal">
+    <div class="section-eyebrow">03 — Projetos</div>
+    <p class="section-sub">Projetos que traduzem aprendizado em prática — de análise exploratória a modelos de machine learning aplicados a finanças.</p>
+  </div>
+
+  <div class="projects-grid">
+    <div class="project-card reveal d1" id="pc1">
+      <div class="project-num">01</div>
+      <div class="project-status status-active">● Em andamento</div>
+      <div class="project-title">Detecção de Anomalias em Grafos de Transações Financeiras</div>
+      <div class="project-desc">Iniciação científica usando Graph Neural Networks para identificar fraudes e comportamentos anômalos em redes de transações. Relevância direta ao ecossistema Itaú.</div>
+      <div class="project-stack">
+        <span class="stack-tag">Neo4j</span>
+        <span class="stack-tag">PyTorch Geometric</span>
+        <span class="stack-tag">GNN</span>
+        <span class="stack-tag">Big Data</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal d2" id="pc2">
+      <div class="project-num">02</div>
+      <div class="project-status status-live">● Portfólio ativo</div>
+      <div class="project-title">Análises Exploratórias e Inferenciais com Python</div>
+      <div class="project-desc">Pipeline completo de EDA: limpeza, transformação, visualização e storytelling com dados. Projetos com contextos variados e foco em decisão baseada em evidências.</div>
+      <div class="project-stack">
+        <span class="stack-tag">Pandas</span>
+        <span class="stack-tag">NumPy</span>
+        <span class="stack-tag">Matplotlib</span>
+        <span class="stack-tag">Estatística</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal d3" id="pc3">
+      <div class="project-num">03</div>
+      <div class="project-status status-live">● Portfólio ativo</div>
+      <div class="project-title">Modelos ML Supervisionado & Não Supervisionado</div>
+      <div class="project-desc">Criação, treinamento e avaliação de modelos com Scikit-Learn. Foco em classificação, regressão e clustering com métricas rigorosas e prevenção de overfitting.</div>
+      <div class="project-stack">
+        <span class="stack-tag">Scikit-Learn</span>
+        <span class="stack-tag">Classificação</span>
+        <span class="stack-tag">Clustering</span>
+        <span class="stack-tag">Python</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal d4" id="pc4">
+      <div class="project-num">04</div>
+      <div class="project-status status-live">● Em uso profissional</div>
+      <div class="project-title">Dashboards Dinâmicos — Excel & Visualização</div>
+      <div class="project-desc">Criação de painéis interativos para apoio à tomada de decisão. Aplicado diretamente no estágio na PUC-SP para análise de demandas e eficiência operacional.</div>
+      <div class="project-stack">
+        <span class="stack-tag">Excel Avançado</span>
+        <span class="stack-tag">Power Query</span>
+        <span class="stack-tag">Pivot Tables</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CONTATO ===== -->
+<div class="section" id="contato">
+  <div class="reveal">
+    <div class="section-eyebrow">04 — Contato</div>
+    <h2 class="section-heading">Um passo para<br><em>começar.</em></h2>
+    <p class="section-sub">Disponível para conversar sobre a vaga, trocar ideias ou simplesmente dar um próximo passo juntos.</p>
+  </div>
+
+  <div class="contato-layout">
+    <div class="contato-list reveal d1">
+      <a href="mailto:tomasbsouza@gmail.com" class="contato-item">
+        <div class="contato-icon">✉️</div>
+        <div>
+          <div class="contato-label">E-mail</div>
+          <div class="contato-value">tomasbsouza@gmail.com</div>
+        </div>
+      </a>
+      <a href="tel:+5511969167104" class="contato-item">
+        <div class="contato-icon">📱</div>
+        <div>
+          <div class="contato-label">Telefone · WhatsApp</div>
+          <div class="contato-value">+55 (11) 96916-7104</div>
+        </div>
+      </a>
+      <div class="contato-item">
+        <div class="contato-icon">📍</div>
+        <div>
+          <div class="contato-label">Localização</div>
+          <div class="contato-value">São Paulo, SP — Brasil</div>
+        </div>
+      </div>
+      <div class="contato-item">
+        <div class="contato-icon">🎓</div>
+        <div>
+          <div class="contato-label">Instituição</div>
+          <div class="contato-value">PUC-SP — Ciência de Dados & IA</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="disponibilidade reveal d2">
+      <div class="disp-title">Disponibilidade</div>
+      <div class="disp-row"><span class="disp-k">Início</span><span class="disp-v green">✅ Imediata</span></div>
+      <div class="disp-row"><span class="disp-k">Formato</span><span class="disp-v">Presencial · Híbrido · Remoto</span></div>
+      <div class="disp-row"><span class="disp-k">Carga horária</span><span class="disp-v">12h / dia — flexível</span></div>
+      <div class="disp-row"><span class="disp-k">Inglês</span><span class="disp-v">Avançado</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    Currículo interativo de <strong>Tomás Barboza e Souza</strong> — Candidato Estágio Itaú · Dados & IA · 2026
+  </div>
+  <div class="footer-right">FEITO DE FUTURO ✦ 2026</div>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const follower = document.getElementById('cursorFollower');
+  let mx = 0, my = 0, fx = 0, fy = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx+'px'; cursor.style.top = my+'px'; });
+  function animateCursor() {
+    fx += (mx - fx) * 0.12;
+    fy += (my - fy) * 0.12;
+    follower.style.left = fx+'px';
+    follower.style.top = fy+'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  // Nav scroll
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('mainNav');
+    if (window.scrollY > 60) nav.classList.add('scrolled'); else nav.classList.remove('scrolled');
+    const h = document.documentElement;
+    const pct = (window.scrollY / (h.scrollHeight - h.clientHeight)) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+  });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const expItems = document.querySelectorAll('.exp-item');
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+
+  revealEls.forEach(el => io.observe(el));
+  expItems.forEach(el => io.observe(el));
+
+  // Counters
+  function countUp(el, target, suffix='') {
+    let cur = 0;
+    const step = target / 50;
+    const t = setInterval(() => {
+      cur = Math.min(cur + step, target);
+      el.innerHTML = Math.round(cur) + suffix;
+      if (cur >= target) clearInterval(t);
+    }, 40);
+  }
+
+  const statsObs = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      countUp(document.getElementById('cnt1'), 1);
+      countUp(document.getElementById('cnt2'), 3);
+      countUp(document.getElementById('cnt3'), 7);
+      document.getElementById('cnt4').innerHTML = '0<span style="font-size:24px">%</span>';
+      let v = 0;
+      const t = setInterval(() => {
+        v = Math.min(v+2, 100);
+        document.getElementById('cnt4').innerHTML = v + '<span style="font-size:24px">%</span>';
+        if (v >= 100) clearInterval(t);
+      }, 30);
+      statsObs.disconnect();
+    }
+  }, { threshold: 0.3 });
+  const statsGrid = document.querySelector('.sobre-stats');
+  if (statsGrid) statsObs.observe(statsGrid);
+
+  // Skill bars
+  const skillObs = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      document.querySelectorAll('.skill-fill-bar').forEach(bar => {
+        bar.style.width = bar.dataset.w + '%';
+      });
+      skillObs.disconnect();
+    }
+  }, { threshold: 0.3 });
+  const skillSection = document.getElementById('habilidades');
+  if (skillSection) skillObs.observe(skillSection);
+
+  // Manifesto reveal
+  const manifestoObs = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      const mpre = document.getElementById('mpre');
+      const mquote = document.getElementById('mquote');
+      const msub = document.getElementById('msub');
+      const mcta = document.getElementById('mcta');
+      if (mpre) setTimeout(() => mpre.classList.add('vis'), 100);
+      if (mquote) setTimeout(() => mquote.classList.add('vis'), 400);
+      if (msub) setTimeout(() => msub.classList.add('vis'), 900);
+      if (mcta) setTimeout(() => mcta.classList.add('vis'), 1200);
+      manifestoObs.disconnect();
+    }
+  }, { threshold: 0.3 });
+  const manifestoEl = document.getElementById('manifesto');
+  if (manifestoEl) manifestoObs.observe(manifestoEl);
+
+  // Project card spotlight
+  document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      card.style.setProperty('--mx', x + '%');
+      card.style.setProperty('--my', y + '%');
+    });
+  });
+</script>
+</body>
+</html>
